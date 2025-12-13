@@ -1,0 +1,27 @@
+# Terraform設定ブロック
+# 使用するプロバイダーとTerraformのバージョン要件を定義
+terraform {
+  required_providers {
+    # AWS Providerの設定
+    aws = {
+      source  = "hashicorp/aws"
+      # AWS Provider バージョン 5.x系の最新を使用
+      version = "~> 5.80"
+    }
+  }
+
+  # Terraformのバージョン要件
+  required_version = ">= 1.10.0"
+}
+
+# AWSプロバイダーの設定
+# デフォルトリージョンを東京(ap-northeast-1)に設定
+provider "aws" {
+  region = "ap-northeast-1"
+}
+
+# IAMモジュールの呼び出し
+# iam/ディレクトリ内のリソースを読み込む
+module "iam" {
+  source = "./iam"
+}
