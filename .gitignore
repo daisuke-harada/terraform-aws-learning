@@ -1,0 +1,45 @@
+# Terraform関連
+# ローカルの.terraformディレクトリ（プロバイダープラグインとモジュールが格納される）
+.terraform/
+
+# tfstateファイル（機密情報が含まれるため）
+*.tfstate
+*.tfstate.*
+
+# Crash logファイル
+crash.log
+crash.*.log
+
+# tfvarsファイル（機密情報が含まれる可能性があるため）
+*.tfvars
+*.tfvars.json
+
+# オーバーライドファイル
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI設定ファイル
+.terraformrc
+terraform.rc
+
+# Terraformのロックファイル（チーム開発の場合はコミットすることもある）
+# .terraform.lock.hcl
+
+# macOS関連
+.DS_Store
+
+# エディタ関連
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# バックアップファイル
+*.backup
+*.bak
+
+# ログファイル
+*.log
