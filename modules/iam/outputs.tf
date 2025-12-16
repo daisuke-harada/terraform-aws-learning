@@ -1,8 +1,9 @@
 # ===================================
 # Outputs
+# IAMモジュールの出力値
 # ===================================
 
-# 他のモジュールから参照される可能性のある基本情報
+# ユーザー関連
 output "user_arn" {
   description = "IAMユーザーのARN"
   value       = aws_iam_user.entry_user.arn
@@ -17,4 +18,10 @@ output "credentials" {
     secret_access_key = aws_iam_access_key.entry_user.secret
   }
   sensitive = true
+}
+
+# ロール関連
+output "role_arn" {
+  description = "IAMロールのARN"
+  value       = aws_iam_role.admin_role.arn
 }

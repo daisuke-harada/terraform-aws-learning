@@ -24,22 +24,7 @@ provider "aws" {
 # Modules
 # ===================================
 
-# IAM Users
-module "iam_users" {
-  source = "./modules/iam/users"
-
-  # 変数をモジュールに渡す
-  entry_user_name         = var.entry_user_name
-  password_length         = var.password_length
-  password_reset_required = var.password_reset_required
-}
-
-# IAM Roles
-module "iam_roles" {
-  source = "./modules/iam/roles"
-
-  # 変数をモジュールに渡す
-  admin_role_name        = var.admin_role_name
-  admin_role_description = var.admin_role_description
-  admin_policy_arn       = var.admin_policy_arn
+# IAMリソース（ユーザーとロールを一元管理）
+module "iam" {
+  source = "./modules/iam"
 }
