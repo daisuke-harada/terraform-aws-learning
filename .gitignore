@@ -43,3 +43,5 @@ terraform.rc
 
 # ログファイル
 *.log
+
+.envrc
