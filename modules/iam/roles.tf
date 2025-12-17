@@ -19,8 +19,8 @@ data "aws_iam_policy_document" "admin_assume_role" {
 
 # 管理者ロールの作成
 resource "aws_iam_role" "admin_role" {
-  name               = var.admin_role_name
-  description        = var.admin_role_description
+  name               = "switch-role-admin"
+  description        = "Switch role for administrators with full access"
   assume_role_policy = data.aws_iam_policy_document.admin_assume_role.json
 }
 

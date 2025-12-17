@@ -5,7 +5,7 @@
 
 # IAMユーザーの作成
 resource "aws_iam_user" "entry_user" {
-  name = var.entry_user_name
+  name = "entry-user"
   path = "/"
 }
 
