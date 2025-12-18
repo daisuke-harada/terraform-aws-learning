@@ -5,6 +5,7 @@
 
 # AssumeRoleポリシードキュメント
 # エントリーユーザーがこのロールを引き受けられるように設定
+# MFA認証が必須
 data "aws_iam_policy_document" "admin_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -13,6 +14,13 @@ data "aws_iam_policy_document" "admin_assume_role" {
       type        = "AWS"
       # 同じモジュール内のユーザーARNを直接参照
       identifiers = [aws_iam_user.entry_user.arn]
+    }
+
+    # MFA認証を必須にする条件
+    condition {
+      test     = "Bool"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["true"]
     }
   }
 }
