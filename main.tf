@@ -21,10 +21,6 @@ provider "aws" {
 }
 
 # ===================================
-# Modules
+# 現在のAWSアカウント情報を取得
 # ===================================
-
-# IAMリソース（ユーザーとロールを一元管理）
-module "iam" {
-  source = "./modules/iam"
-}
+data "aws_caller_identity" "current" {}
