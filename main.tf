@@ -12,6 +12,13 @@ terraform {
 
   # Terraformのバージョン要件
   required_version = ">= 1.10.0"
+
+  backend "s3" {
+    bucket = "daisuke-terraform-state-bucket"
+    key    = "terraform-aws-learning/terraform.tfstate"
+    region = "ap-northeast-1"
+    encrypt = true
+  }
 }
 
 # AWSプロバイダーの設定
