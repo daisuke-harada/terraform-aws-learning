@@ -21,6 +21,15 @@ jobs:
       # 手動実行の場合: 実行時に選択したブランチがチェックアウトされる
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # デバッグ: GitHub Actionsのコンテキスト情報を表示
+      - name: Debug GitHub Context
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Actor: ${{ github.actor }}"
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
