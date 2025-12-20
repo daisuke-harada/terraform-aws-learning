@@ -67,9 +67,9 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
 
     # サブジェクト（sub）の検証
     # 特定のリポジトリからのアクセスのみを許可
-    # ワイルドカード(*)でブランチやタグを問わず許可
+    # StringLikeでワイルドカードパターンマッチング
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values   = ["repo:daisuke-harada/terraform-aws-learning:*"]
     }
