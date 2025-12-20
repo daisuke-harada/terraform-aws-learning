@@ -14,6 +14,8 @@ jobs:
   plan:
     name: Run Terraform Plan
     runs-on: ubuntu-latest
+    # 作成者（あなた）のみ実行可能
+    if: github.actor == 'daisuke-harada'
     steps:
       # リポジトリのコードをチェックアウト
       # GitHub ActionsのVMは空の状態で起動するため、最初にコードをダウンロードする必要がある
