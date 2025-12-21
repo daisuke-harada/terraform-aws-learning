@@ -14,8 +14,11 @@ jobs:
   plan:
     name: Run Terraform Plan
     runs-on: ubuntu-latest
-    # 作成者（あなた）のみ実行可能
-    if: github.actor == 'daisuke-harada'
+    # 許可されたユーザーのみ実行可能
+    # GitHub Secretsで ALLOWED_USERS をJSON配列形式で設定してください
+    env:
+      ALLOWED_USERS: ${{ secrets.ALLOWED_USERS }}
+    if: contains(fromJSON(env.ALLOWED_USERS), github.actor)
     steps:
       # リポジトリのコードをチェックアウト
       # GitHub ActionsのVMは空の状態で起動するため、最初にコードをダウンロードする必要がある
@@ -23,14 +26,6 @@ jobs:
       # 手動実行の場合: 実行時に選択したブランチがチェックアウトされる
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # デバッグ: GitHub Actionsのコンテキスト情報を表示
-      - name: Debug GitHub Context
-        run: |
-          echo "Repository: ${{ github.repository }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "SHA: ${{ github.sha }}"
-          echo "Actor: ${{ github.actor }}"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
