@@ -27,7 +27,7 @@ jobs:
             echo "❌ User ${{ github.actor }} is not allowed to run this workflow"
             exit 1
           fi
-      
+
       # リポジトリのコードをチェックアウト
       # GitHub ActionsのVMは空の状態で起動するため、最初にコードをダウンロードする必要がある
       # PRの場合: PRのソースブランチ（変更を加えたブランチ）がチェックアウトされる
