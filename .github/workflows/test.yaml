@@ -14,12 +14,19 @@ jobs:
   plan:
     name: Run Terraform Plan
     runs-on: ubuntu-latest
-    # 許可されたユーザーのみ実行可能
-    # GitHub Secretsで ALLOWED_USERS をJSON配列形式で設定してください
-    env:
-      ALLOWED_USERS: ${{ secrets.ALLOWED_USERS }}
-    if: contains(fromJSON(env.ALLOWED_USERS), github.actor)
     steps:
+      # 許可されたユーザーチェック
+      - name: Check if user is allowed
+        env:
+          ALLOWED_USERS: ${{ secrets.ALLOWED_USERS }}
+        run: |
+          if echo "$ALLOWED_USERS" | jq -e --arg actor "${{ github.actor }}" 'index($actor) != null' > /dev/null; then
+            echo "✅ User ${{ github.actor }} is allowed to run this workflow"
+          else
+            echo "❌ User ${{ github.actor }} is not allowed to run this workflow"
+            exit 1
+          fi
+      
       # リポジトリのコードをチェックアウト
       # GitHub ActionsのVMは空の状態で起動するため、最初にコードをダウンロードする必要がある
       # PRの場合: PRのソースブランチ（変更を加えたブランチ）がチェックアウトされる
