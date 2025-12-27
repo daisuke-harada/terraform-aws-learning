@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "admin_assume_role" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "AWS"
+      type = "AWS"
       # 同じモジュール内のユーザーARNを直接参照
       identifiers = [aws_iam_user.entry_user.arn]
     }

@@ -1,0 +1,55 @@
+name: Terraform Apply
+
+on:
+  # PRトリガーは削除（Publicリポジトリでは危険）
+  push:
+    branches:
+      - main  # mainブランチへのpushのみ
+  workflow_dispatch: # 手動実行
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  apply:  # planではなくapply
+    name: Run Terraform Apply
+    runs-on: ubuntu-latest
+    steps:
+      # 許可されたユーザーチェック
+      - name: Check if user is allowed
+        env:
+          ALLOWED_USERS: ${{ secrets.ALLOWED_USERS }}
+        run: |
+          set -ex
+          if echo "$ALLOWED_USERS" | jq -e --arg actor "${{ github.actor }}" 'index($actor) != null' > /dev/null; then
+            echo "✅ User ${{ github.actor }} is allowed to run this workflow"
+          else
+            echo "❌ User ${{ github.actor }} is not allowed to run this workflow"
+            exit 1
+          fi
+
+      # リポジトリのコードをチェックアウト
+      # GitHub ActionsのVMは空の状態で起動するため、最初にコードをダウンロードする必要がある
+      # PRの場合: PRのソースブランチ（変更を加えたブランチ）がチェックアウトされる
+      # 手動実行の場合: 実行時に選択したブランチがチェックアウトされる
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # 作成したIAMロールのARNに書き換えてください
+          role-to-assume: arn:aws:iam::047832405157:role/github-actions-role
+          aws-region: ap-northeast-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
