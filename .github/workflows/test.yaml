@@ -20,6 +20,7 @@ jobs:
         env:
           ALLOWED_USERS: ${{ secrets.ALLOWED_USERS }}
         run: |
+          set -ex
           if echo "$ALLOWED_USERS" | jq -e --arg actor "${{ github.actor }}" 'index($actor) != null' > /dev/null; then
             echo "✅ User ${{ github.actor }} is allowed to run this workflow"
           else
