@@ -3,28 +3,7 @@
 # 入口ユーザーを作成
 # ===================================
 
-# ===================================
-# OIDC Provider for GitHub Actions
-# GitHub ActionsからAWSリソースへ安全にアクセスするための設定
-# ===================================
-
-# GitHub Actions用のOIDCプロバイダー
-# アクセスキーを使わずに、GitHub Actionsから一時的な認証情報を取得できる
-# これにより、シークレットにアクセスキーを保存する必要がなくなる
-resource "aws_iam_openid_connect_provider" "github" {
-  # GitHub ActionsのOIDCエンドポイント
-  url = "https://token.actions.githubusercontent.com"
-
-  # STSサービスをオーディエンスとして指定
-  # これにより、GitHub ActionsがAssumeRoleWithWebIdentityを呼び出せる
-  client_id_list = ["sts.amazonaws.com"]
-
-  # OIDCプロバイダーのサーバー証明書の指紋
-  # 注意: 本番環境では正しい指紋を設定すること
-  thumbprint_list = ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
-}
-
-# IAMユー���ーの作成
+# IAMユーザーの作成
 # 最小権限の原則に従い、このユーザー自体には権限を付与しない
 # 必要に応じてswitch-role-adminロールにスイッチして作業する
 resource "aws_iam_user" "entry_user" {
@@ -45,4 +24,18 @@ resource "aws_iam_user_login_profile" "entry_user" {
 # 注意: アクセスキーは慎重に管理すること
 resource "aws_iam_access_key" "entry_user" {
   user = aws_iam_user.entry_user.name
+}
+
+# entry_userをdevelopersグループに追加
+resource "aws_iam_user_group_membership" "entry_user_membership" {
+  user = aws_iam_user.entry_user.name
+  groups = [
+    aws_iam_group.developers.name
+  ]
+}
+
+# entry_userにAdminロールスイッチ権限をアタッチ
+resource "aws_iam_user_policy_attachment" "entry_user_assume_admin" {
+  user       = aws_iam_user.entry_user.name
+  policy_arn = aws_iam_policy.assume_admin_role.arn
 }
