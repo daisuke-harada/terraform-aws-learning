@@ -13,3 +13,9 @@ variable "password_reset_required" {
   type        = bool
   default     = false
 }
+
+variable "email" {
+  description = "Email address for notifications and alerts"
+  type        = string
+  sensitive   = true
+}
