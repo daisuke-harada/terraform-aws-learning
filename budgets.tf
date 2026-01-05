@@ -4,7 +4,7 @@ resource "aws_budgets_budget" "cost_alert" {
   limit_amount      = "30" # 毎月の予算
   limit_unit        = "USD"
   time_unit         = "MONTHLY"
-  time_period_start = "2026-01-01_00:00"
+  time_period_start = "2026-01-01_09:00" # JST (UTC+9)
 
   notification {
     comparison_operator        = "GREATER_THAN"
